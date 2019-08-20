@@ -37,12 +37,12 @@ namespace ProgressBar
             stopwatch = Stopwatch.StartNew();
         }
 
-        private void Update()
+        private void Update(bool done = false, bool success = true)
         {
             var percentage = (decimal)progress / Max * 100;
             int blocks = (int)((decimal)progress / Max * BlocksCount);
 
-            if(stopwatch.ElapsedMilliseconds >= 1000 || average == 0)
+            if (stopwatch.ElapsedMilliseconds >= 1000 || average == 0)
             {
                 average = (average + (decimal)(progress - lastProgress) / stopwatch.ElapsedMilliseconds) / 2;
                 lastProgress = progress;
@@ -50,9 +50,25 @@ namespace ProgressBar
             }
             TimeSpan timeLeft = TimeSpan.FromMilliseconds((int)((Max - progress) / average));
 
-            string progressBar = $"[{new string(Symbol, blocks).PadRight(BlocksCount, ' ')}] ({percentage.ToString("0.0")}%) [{string.Format("{0:h\\:m\\:ss}",timeLeft)}]";
-            Console.SetCursorPosition(PositionX,PositionY);
-            Console.WriteLine(progressBar);
+            string progressBar = $"[{new string(Symbol, blocks).PadRight(BlocksCount, ' ')}] ({percentage.ToString("0.0")}%) [{string.Format("{0:h\\:m\\:ss}", timeLeft)}]";
+            Console.SetCursorPosition(PositionX, PositionY);
+            Console.Write(progressBar);
+
+            if (done)
+            {
+                Console.Write(" [");
+                Console.ForegroundColor = (success) ? ConsoleColor.Green : ConsoleColor.Red;
+                Console.Write((success) ? "Done" : "Failed");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("]\n");
+            }
+            else
+                Console.Write("\n");
         }
+
+        public void Done() =>
+            Update(true);
+        public void Fail() =>
+            Update(true, false);
     }
 }
