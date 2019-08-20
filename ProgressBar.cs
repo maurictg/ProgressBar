@@ -5,11 +5,11 @@ namespace ProgressBar
 {
     class ProgressBar
     {
-        public int BlocksCount = 20,
+        public int BlocksCount = 50,
             Max, Min,
             PositionX, PositionY;
 
-        public char Symbol = '=';
+        public char Symbol = '\u25A0';
         private int progress;
         public int Progress
         {
@@ -25,7 +25,7 @@ namespace ProgressBar
         private decimal average;
         private Stopwatch stopwatch;
 
-        public ProgressBar(int max = 100, int min = 0, int blocksCount = 20, int positionX = 0, int positionY = 0)
+        public ProgressBar(int max = 100, int min = 0, int blocksCount = 50, int positionX = 0, int positionY = 0)
         {
             Max = max;
             Min = min;
